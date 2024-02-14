@@ -29,6 +29,11 @@ const app = new Hono()
   .use("/assets/*", serveStatic({ root: isProd ? "build/" : "./" })) // path must end with '/'
   .get("/*", (c) => c.html(html));
 
+app.use("*", async (c, next) => {
+  c.res.headers.set("X-Powered-By", "Hono");
+  await next();
+});
+
 export default app;
 
 if (isProd) {
